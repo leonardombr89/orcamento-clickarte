@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/orcamento-clickarte",
+            "outputPath": "docs",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -33,6 +33,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/orcamento-clickarte/",
               "budgets": [
                 {
                   "type": "initial",
@@ -92,5 +93,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
