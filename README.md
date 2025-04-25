@@ -1,27 +1,80 @@
-# OrcamentoClickarte
+# 🧾 Orçamento ClickArte
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.9.
+Sistema simples em Angular standalone para orçamentos gráficos da ClickArte Gráfica Rápida.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🌐 Acesse online
 
-## Code scaffolding
+👉 [Clique aqui para abrir o sistema](https://leonardombr89.github.io/orcamento-clickarte/)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 🚀 Tecnologias
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- [Angular 17+ Standalone](https://angular.io/)
+- [Bootstrap 5](https://getbootstrap.com/)
+- HTML + CSS responsivo
+- Deploy via GitHub Pages
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 📦 Como rodar localmente
 
-## Running end-to-end tests
+```bash
+# Clone o repositório
+git clone git@github.com:leonardombr89/orcamento-clickarte.git
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+# Acesse a pasta
+cd orcamento-clickarte
 
-## Further help
+# Instale as dependências
+npm install
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Rode localmente
+ng serve
+```
+
+Abra no navegador:  
+[http://localhost:4200](http://localhost:4200)
+
+---
+
+## 🛠️ Como publicar no GitHub Pages
+
+```bash
+# Gera o build na pasta docs/
+ng build --output-path docs --base-href /orcamento-clickarte/
+
+# (Se estiver usando SSR, copie os arquivos da pasta browser)
+cp -r docs/browser/* docs/
+
+# Adiciona o fallback 404.html
+cp docs/index.html docs/404.html
+```
+
+Depois:
+
+```bash
+git add .
+git commit -m "Deploy para GitHub Pages"
+git push
+```
+
+---
+
+Pronto! O sistema estará online no link abaixo:
+
+📎 https://leonardombr89.github.io/orcamento-clickarte/
+
+---
+
+## ✨ Funcionalidades atuais
+
+- [x] Formulário de orçamento para adesivos
+- [x] Navegação por categorias (Adesivos, Placas, Outros)
+- [x] Layout responsivo e moderno
+- [x] Troca de formulário sem recarregar a página
+- [x] Logo da empresa otimizada
+
+
