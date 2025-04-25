@@ -120,18 +120,15 @@
                 Valor Total: R${{ orcamento.valorFinal.toFixed(2) }}
               </h4>
 
-              <!-- Botão para gerar mensagem -->
-              <div class="d-flex justify-content-center gap-2 mt-4">
-                <button class="btn btn-success" (click)="gerarMensagem()">Gerar Mensagem</button>
-                <button class="btn btn-info" (click)="abrirModalTrello()">Criar Card no Trello</button>
-              </div>
             </div>
             <div *ngIf="mensagemGerada" class="mt-4">
               <h5 class="text-center">Mensagem Gerada</h5>
               <textarea class="form-control" rows="8" readonly>{{ mensagemGerada }}</textarea>
 
-              <div class="text-center mt-2">
+              <div class="text-center mt-2 d-flex justify-content-center gap-2">
                 <button class="btn btn-primary" (click)="copiarMensagem()">Copiar Mensagem</button>
+                <button class="btn btn-success" (click)="abrirModalWhatsapp()">Enviar WhatsApp</button>
+                <!--  <button class="btn btn-info" (click)="abrirModalTrello()">Criar Card no Trello</button> -->
               </div>
             </div>
           </form>
@@ -192,8 +189,47 @@
         </div>
 
         <div class="modal-footer">
-          <button class="btn btn-primary" (click)="copiarMensagem()">Copiar Texto</button>
+          <button type="button" class="btn btn-primary" (click)="copiarMensagem()">Copiar Texto</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal WhatsApp -->
+  <div class="modal fade" id="modalWhatsapp" tabindex="-1" aria-labelledby="modalWhatsappLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalWhatsappLabel">Enviar Orçamento pelo WhatsApp</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nome do Cliente</label>
+            <input type="text" class="form-control" [(ngModel)]="whatsappNomeCliente"
+              [ngModelOptions]="{standalone: true}" required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Telefone (WhatsApp)</label>
+            <input type="text" class="form-control" [(ngModel)]="whatsappTelefoneCliente"
+              [ngModelOptions]="{standalone: true}" mask="(00) 0 0000-0000" placeholder="(xx) 9xxxx-xxxx" required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Mensagem</label>
+            <textarea class="form-control" rows="6" [(ngModel)]="whatsappMensagem" [ngModelOptions]="{standalone: true}"
+              readonly></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" (click)="enviarWhatsapp()">Enviar Mensagem</button>
         </div>
 
       </div>

@@ -40,6 +40,11 @@ export class AppComponent {
   trelloInfoArte: string = '';
   trelloNomeServico: string = '';
 
+  whatsappNomeCliente: string = '';
+  whatsappTelefoneCliente: string = '';
+  whatsappMensagem: string = '';
+
+
 
   selecionarCategoria(categoria: string) {
     this.categoriaSelecionada = categoria;
@@ -56,6 +61,10 @@ export class AppComponent {
       this.corte
     );
 
+    if (this.orcamento) {
+      this.gerarMensagem();
+    }
+
     if (!this.orcamento) {
       alert('Erro ao calcular o orçamento.');
     }
@@ -69,12 +78,6 @@ export class AppComponent {
         this.quantidade,
         this.orcamento
       );
-
-      // Agora abrir o modal Bootstrap manualmente
-      const modalElement = document.getElementById('mensagemModal') as HTMLElement;
-      const modal = new (window as any).bootstrap.Modal(modalElement);
-      modal.show();
-
     }
   }
 
@@ -85,20 +88,20 @@ export class AppComponent {
     textarea.select();
     document.execCommand('copy');
     document.body.removeChild(textarea);
-  
+
     this.mostrarToast('Texto copiado com sucesso!');
   }
-  
+
 
   abrirModalTrello() {
     const modal = new bootstrap.Modal(document.getElementById('modalTrello')!);
     modal.show();
   }
-  
+
   confirmarCriacaoCard() {
     const titulo = `${this.trelloNomeCliente} | ${this.trelloNomeServico} | ${this.trelloTelefoneCliente}`;
     const descricao = `📌 Observações:\n${this.trelloObservacoes}\n\n🎨 Arte:\n${this.trelloInfoArte}`;
-  
+
     this.trelloService.criarCard(titulo, descricao).subscribe({
       next: () => {
         this.mostrarToast('Card criado no Trello com sucesso!', true);
@@ -111,32 +114,64 @@ export class AppComponent {
       }
     });
   }
+
+  abrirModalWhatsapp() {
+    if (!this.mensagemGerada) {
+      this.mostrarToast('Gere uma mensagem antes!', false);
+      return;
+    }
   
+    this.whatsappMensagem = `Olá ${this.whatsappNomeCliente}, segue o seu orçamento:\n\n${this.mensagemGerada}`;
   
+    const modal = new (window as any).bootstrap.Modal(document.getElementById('modalWhatsapp'));
+    modal.show();
+  }
+  
+  enviarWhatsapp() {
+    if (!this.whatsappNomeCliente || !this.whatsappTelefoneCliente) {
+      this.mostrarToast('Preencha o nome e telefone!', false);
+      return;
+    }
+  
+    const numeroFormatado = this.whatsappTelefoneCliente
+      .replace(/\D/g, '') // remove tudo que não for número
+      .replace(/^0/, ''); // remove o zero inicial se houver
+  
+    const mensagemFinal = encodeURIComponent(`Olá ${this.whatsappNomeCliente}! \n\n${this.mensagemGerada}`);
+  
+    window.open(`https://wa.me/55${numeroFormatado}?text=${mensagemFinal}`, '_blank');
+      
+    const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('modalWhatsapp'));
+    modal.hide();
+  
+    this.mostrarToast('Mensagem aberta no WhatsApp com sucesso!');
+  }
+
+
   mostrarToast(mensagem: string, sucesso: boolean = true) {
     const toastEl = document.getElementById('toast-dinamico');
     const toastBody = document.getElementById('toast-body-text');
-  
+
     if (toastEl && toastBody) {
       // Remove classes anteriores
       toastEl.classList.remove('bg-success', 'bg-danger', 'text-white');
-      
+
       // Define a cor baseada no sucesso ou erro
       if (sucesso) {
         toastEl.classList.add('bg-success', 'text-white');
       } else {
         toastEl.classList.add('bg-danger', 'text-white');
       }
-  
+
       // Atualiza o texto
       toastBody.textContent = mensagem;
-  
+
       // Exibe o toast
       const toast = new bootstrap.Toast(toastEl);
       toast.show();
     }
   }
-  
-  
+
+
 
 }
