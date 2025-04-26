@@ -128,7 +128,7 @@
               <div class="text-center mt-2 d-flex justify-content-center gap-2">
                 <button class="btn btn-primary" (click)="copiarMensagem()">Copiar Mensagem</button>
                 <button class="btn btn-success" (click)="abrirModalWhatsapp()">Enviar WhatsApp</button>
-                <!--  <button class="btn btn-info" (click)="abrirModalTrello()">Criar Card no Trello</button> -->
+                <button class="btn btn-info" (click)="abrirModalTrello()">Criar Card no Trello</button> 
               </div>
             </div>
           </form>
@@ -137,25 +137,25 @@
         <!-- Formulário de Placas -->
         <div *ngIf="categoriaSelecionada === 'placas'">
           <h2 class="section-title">Orçamento de Placas</h2>
-          <form>
+          <form (ngSubmit)="calcularOrcamentoPlacas()">
             <div class="row mb-3">
               <div class="col-md-6">
-                <label class="form-label">Material</label>
-                <select class="form-select">
-                  <option>ACM</option>
-                  <option>Acrílico</option>
-                </select>
+                <label class="form-label">Altura (cm)</label>
+                <input type="number" class="form-control" [(ngModel)]="alturaPlaca" name="alturaPlaca" required>
               </div>
               <div class="col-md-6">
-                <label class="form-label">Tamanho (cm)</label>
-                <input type="text" class="form-control">
+                <label class="form-label">Largura (cm)</label>
+                <input type="number" class="form-control" [(ngModel)]="larguraPlaca" name="larguraPlaca" required>
               </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Calcular</button>
+            <button type="submit" class="btn btn-primary"
+              [disabled]="!alturaPlaca || !larguraPlaca || alturaPlaca <= 0 || larguraPlaca <= 0">
+              Calcular
+            </button>
           </form>
         </div>
-
+        
         <!-- Formulário de Outros -->
         <div *ngIf="categoriaSelecionada === 'outros'">
           <h2 class="section-title">Outros Orçamentos</h2>

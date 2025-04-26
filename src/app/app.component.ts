@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 import { OrcamentoService } from './services/orcamento.service';
+import { OrcamentoPlacaService } from './services/orcamento-placa.service';
 import { TrelloService } from './services/trello.service';
 
 declare var bootstrap: any;
@@ -18,7 +19,10 @@ declare var bootstrap: any;
 })
 export class AppComponent {
 
-  constructor(private orcamentoService: OrcamentoService, private trelloService: TrelloService) { }
+  constructor(
+    private orcamentoService: OrcamentoService,
+    private orcamentoServicePlaca: OrcamentoPlacaService,
+    private trelloService: TrelloService) { }
 
   title = 'orcamento-clickarte';
   categoriaSelecionada = 'adesivos';
@@ -44,6 +48,8 @@ export class AppComponent {
   whatsappTelefoneCliente: string = '';
   whatsappMensagem: string = '';
 
+  alturaPlaca!: number;
+  larguraPlaca!: number;
 
 
   selecionarCategoria(categoria: string) {
@@ -68,6 +74,10 @@ export class AppComponent {
     if (!this.orcamento) {
       alert('Erro ao calcular o orçamento.');
     }
+  }
+
+  calcularOrcamentoPlacas(){
+    this.orcamentoServicePlaca.processarOrcamento(this.alturaPlaca, this.larguraPlaca);
   }
 
   gerarMensagem() {
