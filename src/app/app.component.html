@@ -128,7 +128,7 @@
               <div class="text-center mt-2 d-flex justify-content-center gap-2">
                 <button class="btn btn-primary" (click)="copiarMensagem()">Copiar Mensagem</button>
                 <button class="btn btn-success" (click)="abrirModalWhatsapp()">Enviar WhatsApp</button>
-                <button class="btn btn-info" (click)="abrirModalTrello()">Criar Card no Trello</button> 
+                <button class="btn btn-info" (click)="abrirModalTrello()">Criar Card no Trello</button>
               </div>
             </div>
           </form>
@@ -155,7 +155,7 @@
             </button>
           </form>
         </div>
-        
+
         <!-- Formulário de Outros -->
         <div *ngIf="categoriaSelecionada === 'outros'">
           <h2 class="section-title">Outros Orçamentos</h2>
@@ -280,8 +280,14 @@
 
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button class="btn btn-primary" (click)="confirmarCriacaoCard()" [disabled]="!formTrello.valid">
-              Criar Card
+            <button type="button" class="btn btn-success" (click)="confirmarCriacaoCard()" [disabled]="isLoadingTrello">
+
+              <span *ngIf="!isLoadingTrello">Criar Card</span>
+              <span *ngIf="isLoadingTrello">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Criando...
+              </span>
+
             </button>
           </div>
         </form>

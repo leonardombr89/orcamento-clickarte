@@ -27,6 +27,8 @@ export class AppComponent {
   title = 'orcamento-clickarte';
   categoriaSelecionada = 'adesivos';
 
+  isLoadingTrello = false;
+
   // Campos do formulário de adesivos
   altura!: number;
   largura!: number;
@@ -76,7 +78,7 @@ export class AppComponent {
     }
   }
 
-  calcularOrcamentoPlacas(){
+  calcularOrcamentoPlacas() {
     this.orcamentoServicePlaca.processarOrcamento(this.alturaPlaca, this.larguraPlaca);
   }
 
@@ -109,51 +111,86 @@ export class AppComponent {
   }
 
   confirmarCriacaoCard() {
+    this.isLoadingTrello = true; // Começa o loading
+
     const titulo = `${this.trelloNomeCliente} | ${this.trelloNomeServico} | ${this.trelloTelefoneCliente}`;
-    const descricao = `📌 Observações:\n${this.trelloObservacoes}\n\n🎨 Arte:\n${this.trelloInfoArte}`;
+
+    let descricao = '';
+
+    // 🧾 Orçamento
+    descricao += `🧾 *Orçamento*\n`;
+
+    // ➔ Resumo
+    if (this.mensagemGerada) {
+      descricao += `  ➔ *Resumo:*\n${this.mensagemGerada}\n\n`;
+    }
+
+    // ➔ Observações do Sistema
+    if (this.orcamento?.detalhesImpressao?.length) {
+      descricao += `  ➔ *Observações do Sistema:*\n${this.orcamento.detalhesImpressao.join('\n')}\n\n`;
+    }
+
+    // ➔ Valor Final
+    if (this.orcamento?.valorFinal !== undefined) {
+      descricao += `  ➔ *Valor Final:* R$${this.orcamento.valorFinal.toFixed(2)}\n\n`;
+    }
+
+    // 📌 Observações do Cliente
+    if (this.trelloObservacoes) {
+      descricao += `📌 *Observações do Cliente:*\n${this.trelloObservacoes}\n\n`;
+    }
+
+    // 🎨 Detalhes da Arte
+    if (this.trelloInfoArte) {
+      descricao += `🎨 *Detalhes da Arte:*\n${this.trelloInfoArte}\n\n`;
+    }
 
     this.trelloService.criarCard(titulo, descricao).subscribe({
       next: () => {
         this.mostrarToast('Card criado no Trello com sucesso!', true);
+
         const modalInstance = (window as any).bootstrap.Modal.getInstance(document.getElementById('modalTrello'));
         modalInstance?.hide();
+        this.isLoadingTrello = false;
       },
       error: (error) => {
         console.error('Erro ao criar card:', error);
         this.mostrarToast('Erro ao criar o card no Trello!', false);
+        this.isLoadingTrello = false;
       }
     });
   }
+
 
   abrirModalWhatsapp() {
     if (!this.mensagemGerada) {
       this.mostrarToast('Gere uma mensagem antes!', false);
       return;
     }
-  
+
     this.whatsappMensagem = `Olá ${this.whatsappNomeCliente}, segue o seu orçamento:\n\n${this.mensagemGerada}`;
-  
+
     const modal = new (window as any).bootstrap.Modal(document.getElementById('modalWhatsapp'));
     modal.show();
   }
-  
+
   enviarWhatsapp() {
     if (!this.whatsappNomeCliente || !this.whatsappTelefoneCliente) {
       this.mostrarToast('Preencha o nome e telefone!', false);
       return;
     }
-  
+
     const numeroFormatado = this.whatsappTelefoneCliente
       .replace(/\D/g, '') // remove tudo que não for número
       .replace(/^0/, ''); // remove o zero inicial se houver
-  
+
     const mensagemFinal = encodeURIComponent(`Olá ${this.whatsappNomeCliente}! \n\n${this.mensagemGerada}`);
-  
+
     window.open(`https://wa.me/55${numeroFormatado}?text=${mensagemFinal}`, '_blank');
-      
+
     const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('modalWhatsapp'));
     modal.hide();
-  
+
     this.mostrarToast('Mensagem aberta no WhatsApp com sucesso!');
   }
 

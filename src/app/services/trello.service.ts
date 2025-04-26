@@ -15,6 +15,6 @@ export class TrelloService {
       descricao: descricao
     };
 
-    return this.http.post(this.backendUrl, payload);
+    return this.http.post(this.backendUrl, payload, { responseType: 'text' });
   }
 }
