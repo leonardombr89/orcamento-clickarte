@@ -5,17 +5,19 @@ import { Injectable } from '@angular/core';
 })
 export class LoadingService {
   private activeRequests = 0;
-  private loadingStartTime: number = 0;
-  private minDuration = 2000; // 2 segundos
+  private loadingStartTime = 0;
+  private minDuration = 2000; // mínimo 2 segundos
   private isForceHiding = false;
   private pendingCallbacks: (() => void)[] = [];
+  private loadingElement: HTMLDivElement | null = null;
 
   show() {
     this.activeRequests++;
 
     if (this.activeRequests === 1) {
       this.loadingStartTime = Date.now();
-      document.body.classList.add('loading');
+      this.createLoadingElement();
+      this.loadingElement!.style.display = 'flex';
     }
   }
 
@@ -41,21 +43,33 @@ export class LoadingService {
   }
 
   private forceHide() {
-    document.body.classList.remove('loading');
-    // Depois que esconder, executar as ações pendentes
+    if (this.loadingElement) {
+      this.loadingElement.style.display = 'none';
+    }
     this.pendingCallbacks.forEach(callback => callback());
     this.pendingCallbacks = [];
   }
 
   runAfterHide(callback: () => void) {
     if (this.activeRequests === 0 && !this.isForceHiding) {
-      callback(); // Loading já acabou
+      callback();
     } else {
-      this.pendingCallbacks.push(callback); // Aguarda o fim
+      this.pendingCallbacks.push(callback);
     }
   }
 
   isLoading(): boolean {
     return this.activeRequests > 0;
+  }
+
+  private createLoadingElement() {
+    if (!this.loadingElement) {
+      this.loadingElement = document.createElement('div');
+      this.loadingElement.classList.add('loading-overlay');
+      this.loadingElement.innerHTML = `
+        <div class="spinner"></div>
+      `;
+      document.body.appendChild(this.loadingElement);
+    }
   }
 }
