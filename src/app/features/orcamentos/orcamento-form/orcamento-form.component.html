@@ -1,0 +1,57 @@
+<h2>{{ isEditMode ? '✏️ Editar Orçamento' : '➕ Novo Orçamento' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="mb-3">
+    <label class="form-label">Nome do Cliente</label>
+    <input type="text" class="form-control" formControlName="clienteNome" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Telefone</label>
+    <input type="text" class="form-control" formControlName="clienteTelefone" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input type="email" class="form-control" formControlName="clienteEmail" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Observações</label>
+    <textarea class="form-control" formControlName="observacoes"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Validade</label>
+    <input type="date" class="form-control" formControlName="validade" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Status</label>
+    <select class="form-select" formControlName="status">
+      <option value="APROVADO">Aprovado</option>
+      <option value="REPROVADO">Reprovado</option>
+      <option value="VENCIDO">Vencido</option>
+      <option value="CANCELADO">Cancelado</option>
+    </select>
+  </div>
+
+  <div formArrayName="itens">
+    <div *ngFor="let item of itens.controls; let i = index" [formGroupName]="i" class="card p-3 mb-3">
+      <label>Produto</label>
+      <input class="form-control mb-2" formControlName="produtoNome" />
+
+      <label>Preço Unitário</label>
+      <input type="number" class="form-control mb-2" formControlName="precoUnitario" />
+
+      <label>Quantidade</label>
+      <input type="number" class="form-control mb-2" formControlName="quantidade" />
+
+      <button type="button" class="btn btn-sm btn-danger mt-2" (click)="removeItem(i)">Remover</button>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-outline-primary" (click)="addItem()">+ Adicionar Item</button>
+
+  <button type="submit" class="btn btn-success mt-4">Salvar</button>
+</form>

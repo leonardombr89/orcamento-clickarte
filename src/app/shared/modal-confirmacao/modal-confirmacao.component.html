@@ -1,0 +1,22 @@
+<div class="modal fade show d-block" tabindex="-1" *ngIf="visible">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+  
+        <div class="modal-header">
+          <h5 class="modal-title">{{ titulo }}</h5>
+          <button type="button" class="btn-close" aria-label="Fechar" (click)="fechar()"></button>
+        </div>
+  
+        <div class="modal-body">
+          <p class="text-center" [innerHTML]="texto"></p>
+        </div>
+  
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" (click)="fechar()">Não</button>
+          <button type="button" class="btn btn-primary" (click)="confirmarAcao()">Sim</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,160 @@
+<app-page-header [titulo]="'Orçamentos'">
+
+  <!-- Botão Novo Orçamento - fora do card -->
+  <div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-primary rounded-pill d-flex align-items-center gap-2 px-4" (click)="abrirNovoOrcamento()">
+      <i class="bi bi-plus-circle"></i>
+      <span>Novo Orçamento</span>
+    </button>
+  </div>
+  <div class="card p-4 mb-4 shadow-sm">
+    <h5 class="mb-3 text-primary fw-bold">🔍 Filtros de Orçamentos</h5>
+
+    <div class="row g-3 align-items-end">
+      <!-- Busca -->
+      <div class="col-md-4">
+        <label class="form-label">Buscar por nome ou título</label>
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-primary"></i></span>
+          <input type="text" class="form-control border-start-0" placeholder="Digite aqui..." [(ngModel)]="filtroBusca"
+            (input)="aplicarFiltro()" />
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="col-md-3">
+        <label class="form-label">Status</label>
+        <select class="form-select" [(ngModel)]="filtroStatus" (change)="aplicarFiltro()">
+          <option value="">Todos</option>
+          <option value="PENDENTE">Pendente</option>
+          <option value="APROVADO">Aprovado</option>
+          <option value="REPROVADO">Reprovado</option>
+          <option value="CANCELADO">Cancelado</option>
+          <option value="VENCIDO">Vencido</option>
+        </select>
+      </div>
+
+      <!-- Data Início -->
+      <div class="col-md-2">
+        <label class="form-label">Data (de)</label>
+        <input type="date" class="form-control" [(ngModel)]="filtroDataInicial" (change)="validarIntervaloDatas()" />
+      </div>
+
+      <!-- Data Fim -->
+      <div class="col-md-2">
+        <label class="form-label">Data (até)</label>
+        <input type="date" class="form-control" [(ngModel)]="filtroDataFinal" (change)="validarIntervaloDatas()" />
+      </div>
+
+      <!-- Botões -->
+      <div class="col-md-1 d-flex flex-column gap-2">
+        <button class="btn btn-primary btn-sm rounded-pill d-flex align-items-center justify-content-center gap-2"
+          (click)="limparFiltros()">
+          <i class="bi bi-x-circle"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</app-page-header>
+
+<!-- TABELA -->
+<div class="orcamentos-table bg-white p-3 rounded shadow-sm">
+  <table class="table table-hover align-middle">
+    <thead class="table-light text-center">
+      <tr>
+        <th>Id</th>
+        <th>Cliente</th>
+        <th>Criação</th>
+        <th>Validade</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr *ngFor="let orc of orcamentos; let i = index">
+        <td>{{ orc.id }}</td>
+        <td><strong>{{ orc.clienteNome }}</strong></td>
+        <td>{{ orc.dataCriacao | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ orc.dataValidade | date: 'dd/MM/yyyy' }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'bg-success': orc.status === 'APROVADO',
+            'bg-danger': orc.status === 'REPROVADO' || orc.status === 'CANCELADO',
+            'bg-warning': orc.status === 'VENCIDO',
+            'bg-secondary': orc.status === 'PENDENTE'
+          }">
+            {{ orc.status }}
+          </span>
+        </td>
+        <td class="d-flex gap-1 justify-content-center flex-wrap">
+          <!-- Editar ou Visualizar (sempre funciona) -->
+          <button class="btn btn-light btn-sm"
+            [attr.title]="orc.status === 'PENDENTE' ? 'Editar orçamento' : 'Visualizar orçamento'"
+            (click)="abrirModalEditar(orc)">
+            <i class="bi" [ngClass]="orc.status === 'PENDENTE' ? 'bi-pencil' : 'bi-eye'"></i>
+          </button>
+
+          <!-- Aprovar (só se PENDENTE) -->
+          <button class="btn btn-light btn-sm d-flex align-items-center justify-content-center"
+            [disabled]="orc.status !== 'PENDENTE'"
+            [title]="orc.status === 'APROVADO' ? 'Já aprovado' : 'Aprovar orçamento'"
+            (click)="abrirModalConfirmacao(orc)" style="width: 32px; height: 32px;">
+
+            <i *ngIf="orc.status === 'APROVADO'" class="bi bi-check-circle-fill text-success"
+              style="font-size: 1.1rem;"></i>
+
+            <i *ngIf="orc.status !== 'PENDENTE' && orc.status !== 'APROVADO'" class="bi bi-check-circle text-muted"
+              style="font-size: 1.1rem;"></i>
+
+            <i *ngIf="orc.status === 'PENDENTE'" class="bi bi-check-circle" style="font-size: 1.1rem;"></i>
+
+          </button>
+
+
+
+          <!-- Cancelar (só se PENDENTE) -->
+          <button class="btn btn-light btn-sm" [disabled]="orc.status !== 'PENDENTE'"
+            [title]="orc.status !== 'PENDENTE' ? 'Ação indisponível' : 'Cancelar orçamento'"
+            (click)="abrirModalExclusao(orc)">
+            <i class="bi" [ngClass]="orc.status === 'PENDENTE' ? 'bi-x-circle' : 'bi-x-circle text-muted'"></i>
+          </button>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Paginação -->
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+      Exibindo {{ primeiroRegistroPagina }} a {{ ultimoRegistroPagina }} de {{ totalRegistros }} registros
+    </div>
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item" [class.disabled]="paginaAtual === 1">
+          <button class="page-link" (click)="paginaAnterior()" [disabled]="paginaAtual === 1">Anterior</button>
+        </li>
+        <li class="page-item" [class.disabled]="paginaAtual === totalPaginas">
+          <button class="page-link" (click)="paginaProxima()" [disabled]="paginaAtual === totalPaginas">Próxima</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!-- MODAL -->
+<app-orcamento-modal [visible]="modalSalvarAberto" [orcamento]="formOrcamento"
+  [somenteVisualizacao]="somenteVisualizacao" (closed)="modalSalvarAberto = false" (salvar)="salvarOuAtualizar($event)">
+</app-orcamento-modal>
+
+
+<app-modal-confirmacao [visible]="modalConfirmacaoVisivelTrello" [titulo]="'Aprovar orçamento!'"
+  [texto]="'Ao aprovar esse orçamento você estará abrindo um card no Trello! <br> Deseja aprovar este orçamento?'"
+  (confirmar)="aprovarOrcamento(orcamentoSelecionado)" (cancelar)="modalConfirmacaoVisivelTrello = false">
+</app-modal-confirmacao>
+
+<app-modal-confirmacao [visible]="modalConfirmacaoExclusao" [titulo]="'Cancelar orçamento!'"
+  [texto]="'Tem certeza que deseja cancelar este orçamento? Essa ação não pode ser desfeita.'"
+  (confirmar)="cancelarOrcamento(orcamentoSelecionado)" (cancelar)="modalConfirmacaoExclusao = false">
+</app-modal-confirmacao>

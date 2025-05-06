@@ -1,0 +1,186 @@
+/* orcamento-calculadora.component.css */
+
+/* Botões de categoria */
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .category-tabs .btn {
+    border-radius: 999px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .category-tabs .btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+  
+  .category-tabs .btn-outline-primary {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  
+  .category-tabs .btn-outline-primary:hover {
+    background-color: var(--color-primary-light);
+    color: white;
+  }
+  
+  /* Formulários */
+  .form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .form-label {
+    font-weight: 500;
+    color: var(--color-primary-dark);
+  }
+  
+  input.form-control,
+  select.form-select,
+  textarea.form-control {
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-primary-light);
+  }
+  
+  textarea[readonly],
+  input[readonly] {
+    background-color: #f8f9fa;
+  }
+  
+  /* Tabela de orçamento */
+  .table {
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .table thead {
+    background-color: var(--color-primary-lighter);
+  }
+  
+  .table th,
+  .table td {
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  .text-success {
+    color: #28a745;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+  }
+  
+  /* Botões de ação */
+  .d-flex button {
+    min-width: 140px;
+  }
+  
+  /* Modais */
+  .modal-header,
+  .modal-footer {
+    background-color: var(--color-primary-lighter);
+  }
+  
+  .modal-title {
+    color: var(--color-primary-dark);
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+  
+  .btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+  }
+  
+  .btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+  }
+  
+  /* Toast */
+  .toast {
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 0.5rem;
+  }
+ 
+  .toast-body {
+    font-size: 0.95rem;
+  }
+
+  /*Cards*/
+  .category-cards {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .category-card {
+    flex: 1 1 calc(33.33% - 1rem); /* ocupa 1/3 da linha com gap de 1rem */
+    background-color: var(--color-primary-lighter);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 250px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .category-card.active {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  .category-card .icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  
+  .category-card .title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: inherit;
+  }
+  
+  .category-card .subtitle {
+    font-size: 0.85rem;
+    color: inherit;
+  }
+  
+  

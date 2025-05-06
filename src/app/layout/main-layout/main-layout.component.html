@@ -1,0 +1,81 @@
+<!-- NAVBAR SUPERIOR -->
+<nav class="top-navbar d-flex align-items-center justify-content-between px-4 py-2">
+  <img src="assets/logo-clickarte.png" alt="ClickArte Logo" class="logo-clickarte" />
+
+  <div class="d-flex align-items-center gap-4 top-actions dropdowns">
+    <!-- Botão de Notificação (placeholder) -->
+    <button class="btn btn-outline-light d-flex align-items-center gap-1">
+      <i class="bi bi-bell-fill"></i>
+      <span class="d-none d-md-inline">Notificações</span>
+    </button>
+
+    <!-- Menu de Usuário -->
+    <div class="user-dropdown position-relative">
+      <button class="btn btn-outline-light d-flex align-items-center gap-2" (click)="toggleDropdown()">
+        <i class="bi bi-person-circle fs-5"></i>
+        <span class="d-none d-md-inline">{{ nomeUsuario }}</span>
+        <i class="bi" [ngClass]="dropdownAberto ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+      </button>
+
+      <div class="dropdown-menu-custom" *ngIf="dropdownAberto">
+        <a class="dropdown-item" (click)="abrirModalPerfil()">Meu Perfil</a>
+        <!-- Futuro uso -->
+        <!-- <a class="dropdown-item" href="#">Configurações</a> -->
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item text-danger" (click)="logout()">Sair</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- LAYOUT GERAL -->
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    <button class="toggle-btn" (click)="toggleSidebar()" title="Recolher menu">
+      <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+    </button>
+
+    <h5 *ngIf="!isSidebarCollapsed">📁 Menu</h5>
+
+    <ul class="menu-list">
+      <li>
+        <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="bi bi-calculator"></i>
+          <span *ngIf="!isSidebarCollapsed"> Calculadora</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/orcamentos" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="bi bi-file-earmark-text"></i>
+          <span *ngIf="!isSidebarCollapsed"> Orçamentos</span>
+        </a>
+      </li>
+      <li *ngIf="perfilUsuario === 'GESTOR'">
+        <a routerLink="/usuarios" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="bi bi-people-fill"></i>
+          <span *ngIf="!isSidebarCollapsed"> Usuários</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- TOAST GLOBAL -->
+  <app-toast #toast></app-toast>
+</div>
+
+<!-- MODAL DE PERFIL (reutiliza modal de usuário em modo restrito) -->
+<app-usuario-modal 
+  [visible]="modalPerfilAberto"
+  [usuario]="usuarioLogado"
+  [somenteVisualizacao]="false"
+  [modoPerfil]="true"
+  (closed)="modalPerfilAberto = false"
+  (salvar)="atualizarPerfil($event)">
+</app-usuario-modal>

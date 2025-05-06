@@ -1,0 +1,29 @@
+/* orcamento-modal.component.css */
+
+.tabela-itens {
+    border: 1px solid var(--color-primary);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .tabela-itens thead {
+    background-color: var(--color-primary-light);
+    color: white;
+  }
+  
+  .tabela-itens tbody tr {
+    background-color: var(--color-primary-lighter);
+    border-bottom: 1px solid var(--color-primary-light);
+    transition: background-color 0.3s ease;
+  }
+  
+  .tabela-itens tbody tr:hover {
+    background-color: var(--color-primary-light);
+    color: white;
+  }
+  
+  .tabela-itens th,
+  .tabela-itens td {
+    vertical-align: middle;
+  }
+  

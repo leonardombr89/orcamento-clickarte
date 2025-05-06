@@ -1,24 +1,106 @@
+:root {
+  /* Paleta principal */
+  --color-primary: #007BFF;
+  --color-primary-light: #66B2FF;
+  --color-primary-lighter: #E6F2FF;
+  --color-primary-dark: #0056b3;
+
+  /* Complementares */
+  --color-accent: #FF6B00;
+  --color-neutral: #F8F9FA;
+
+  /* Texto */
+  --color-text-dark: #212529;
+}
+
+body {
+  background-color: var(--color-neutral);
+  color: var(--color-text-dark);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Botões */
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: white;
+}
+.btn-accent:hover {
+  background-color: #e65c00;
+}
+
+/* Cards */
+.card {
+  background-color: var(--color-primary-lighter);
+  border: 1px solid var(--color-primary-light);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Headers e títulos */
+h1, h2, h3 {
+  color: var(--color-primary-dark);
+}
+
+/* Layout */
+.container {
+  padding: 2rem;
+}
+
+.navbar {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.sidebar {
+  background-color: var(--color-primary-lighter);
+  border-right: 1px solid var(--color-primary-light);
+  min-height: 100vh;
+  padding: 1rem;
+}
+
 .loading-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(255, 255, 255, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
-  
-  .spinner {
-    width: 60px;
-    height: 60px;
-    border: 6px solid #007BFF;
-    border-top: 6px solid transparent;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(248, 249, 250, 0.8); /* cor neutra com transparência */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid var(--color-primary-light); /* #66B2FF */
+  border-top: 6px solid var(--color-primary);   /* #007BFF */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

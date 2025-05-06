@@ -1,0 +1,43 @@
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <div class="card p-4" style="width: 100%; max-width: 400px;">
+    <h2 class="text-center mb-4 text-primary">Registro do Gestor</h2>
+    <form (ngSubmit)="registrar()" #registerForm="ngForm">
+      <div class="mb-3">
+        <label for="nome" class="form-label">Nome</label>
+        <input
+          id="nome"
+          name="nome"
+          type="text"
+          class="form-control"
+          [(ngModel)]="form.nome"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="username" class="form-label">Usuário</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          class="form-control"
+          [(ngModel)]="form.username"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="senha" class="form-label">Senha</label>
+        <input
+          id="senha"
+          name="senha"
+          type="password"
+          class="form-control"
+          [(ngModel)]="form.senha"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">
+        Registrar
+      </button>
+    </form>
+  </div>
+</div>

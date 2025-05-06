@@ -1,0 +1,21 @@
+<div *ngIf="mostrarFormulario" class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card p-4" style="width: 100%; max-width: 400px;">
+      <h2 class="text-center mb-4 text-primary">Registro do Gestor</h2>
+      <form (ngSubmit)="registrar()" #formRef="ngForm">
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input class="form-control" [(ngModel)]="form.nome" name="nome" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Usuário</label>
+          <input class="form-control" [(ngModel)]="form.username" name="username" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Senha</label>
+          <input type="password" class="form-control" [(ngModel)]="form.senha" name="senha" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Registrar</button>
+      </form>
+    </div>
+  </div>
+  

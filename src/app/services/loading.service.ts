@@ -52,6 +52,7 @@ export class LoadingService {
 
   runAfterHide(callback: () => void) {
     if (this.activeRequests === 0 && !this.isForceHiding) {
+      // Mesmo se nem existiu loading ainda, chamamos na hora
       callback();
     } else {
       this.pendingCallbacks.push(callback);
@@ -59,7 +60,7 @@ export class LoadingService {
   }
 
   isLoading(): boolean {
-    return this.activeRequests > 0;
+    return this.activeRequests > 0 || this.isForceHiding;
   }
 
   private createLoadingElement() {

@@ -35,7 +35,7 @@ export class ApiService {
 
   private handleError(error: any) {
     console.error('Erro na requisição:', error);
-    this.toastService.mostrarToast('Erro ao processar a solicitação!', false);
+    this.toastService.show('Erro ao processar a solicitação!', false);
     return throwError(() => error);
   }
 }

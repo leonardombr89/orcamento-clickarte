@@ -1,34 +1,21 @@
 import { Injectable } from '@angular/core';
+import { ToastComponent } from '../shared/tost.component/toast.component';
 import { LoadingService } from './loading.service';
 
-declare const bootstrap: any;
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ToastService {
+  
+  private toastRef?: ToastComponent;
 
   constructor(private loadingService: LoadingService) {}
 
-  mostrarToast(mensagem: string, sucesso: boolean = true) {
+  setToast(toast: ToastComponent) {
+    this.toastRef = toast;
+  }
+
+  show(message: string, success: boolean = true) {
     this.loadingService.runAfterHide(() => {
-      const toastEl = document.getElementById('toast-dinamico');
-      const toastBody = document.getElementById('toast-body-text');
-
-      if (toastEl && toastBody) {
-        toastEl.classList.remove('bg-success', 'bg-danger', 'text-white');
-
-        if (sucesso) {
-          toastEl.classList.add('bg-success', 'text-white');
-        } else {
-          toastEl.classList.add('bg-danger', 'text-white');
-        }
-
-        toastBody.textContent = mensagem;
-
-        const toast = new bootstrap.Toast(toastEl);
-        toast.show();
-      }
+      this.toastRef?.show(message, success);
     });
   }
 }

@@ -1,0 +1,243 @@
+<app-page-header [titulo]="'Calculadora de Orçamento'"></app-page-header>
+
+<div class="orcamento-wrapper">
+
+  <!-- Cards de categoria -->
+  <div class="container">
+    <div class="category-cards d-flex justify-content-between flex-wrap gap-3 mb-4">
+      <div class="category-card" [class.active]="categoriaSelecionada === 'adesivos'"
+        (click)="selecionarCategoria('adesivos')">
+        <div class="icon bg-primary text-white">
+          <i class="bi bi-image"></i>
+        </div>
+        <div>
+          <div class="title">Adesivos</div>
+          <div class="subtitle">Vinil, papel e +</div>
+        </div>
+      </div>
+
+      <div class="category-card" [class.active]="categoriaSelecionada === 'placas'"
+        (click)="selecionarCategoria('placas')">
+        <div class="icon bg-success text-white">
+          <i class="bi bi-bounding-box-circles"></i>
+        </div>
+        <div>
+          <div class="title">Placas</div>
+          <div class="subtitle">Lona</div>
+        </div>
+      </div>
+
+      <div class="category-card" [class.active]="categoriaSelecionada === 'outros'"
+        (click)="selecionarCategoria('outros')">
+        <div class="icon bg-warning text-white">
+          <i class="bi bi-tools"></i>
+        </div>
+        <div>
+          <div class="title">Outros</div>
+          <div class="subtitle">Serviços extras</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="card p-4">
+    <!-- Formulário de Adesivos -->
+    <div *ngIf="categoriaSelecionada === 'adesivos'">
+      <h4 class="section-title mb-4">Orçamento de Adesivos</h4>
+      <form (ngSubmit)="calcularOrcamento()">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Altura (cm)</label>
+            <input type="number" class="form-control" [(ngModel)]="altura" name="altura" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Largura (cm)</label>
+            <input type="number" class="form-control" [(ngModel)]="largura" name="largura" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Quantidade</label>
+            <input type="number" class="form-control" [(ngModel)]="quantidade" name="quantidade" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" [(ngModel)]="tipo" name="tipo">
+              <option>Vinil</option>
+              <option>Papel</option>
+              <option>Metro Quadrado</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Corte</label>
+            <select class="form-select" [(ngModel)]="corte" name="corte">
+              <option>Nenhum</option>
+              <option>Manual</option>
+              <option>Eletrônico</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="text-end mt-3">
+          <button type="submit" class="btn btn-primary"
+            [disabled]="!altura || !largura || !quantidade || altura <= 0 || largura <= 0 || quantidade <= 0">
+            Calcular
+          </button>
+        </div>
+      </form>
+
+      <div *ngIf="orcamento" class="mt-4">
+        <h5 class="text-success text-center">Resumo do Orçamento</h5>
+        <table class="table table-bordered table-hover mt-3">
+          <thead class="table-light text-center">
+            <tr>
+              <th>Qtd.</th>
+              <th>Produto</th>
+              <th>Val. Unitário</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngFor="let produto of orcamento.produtos">
+              <td><strong>{{ produto.quantidade }}</strong></td>
+              <td><strong>{{ produto.descricao }}</strong></td>
+              <td>R${{ produto.valorUnitario.toFixed(2) }}</td>
+              <td>R${{ produto.subTotal.toFixed(2) }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="orcamento?.detalhesImpressao?.length > 0" class="mt-4">
+          <h6 class="text-primary">📌 Observações:</h6>
+          <pre class="bg-light p-3 rounded small">{{ orcamento.detalhesImpressao.join('\n') }}</pre>
+        </div>
+
+        <h4 class="text-center mt-3 text-danger">
+          Valor Total: R${{ orcamento.valorFinal.toFixed(2) }}
+        </h4>
+      </div>
+
+      <div *ngIf="mensagemGerada" class="mt-4">
+        <h5 class="text-center">Mensagem Gerada</h5>
+        <textarea class="form-control" rows="6" readonly>{{ mensagemGerada }}</textarea>
+
+        <div class="text-center mt-3 d-flex justify-content-center gap-2">
+          <button class="btn btn-primary" (click)="copiarMensagem()">Copiar</button>
+          <button class="btn btn-success" (click)="abrirModalWhatsapp()">WhatsApp</button>
+          <button class="btn btn-secondary" (click)="abrirModalSalvarComOrcamento(orcamento)">Salvar</button>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Formulário de Placas -->
+    <div *ngIf="categoriaSelecionada === 'placas'">
+      <h4 class="section-title mb-4">Orçamento de Placas</h4>
+      <form (ngSubmit)="calcularOrcamentoPlacas()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Altura (cm)</label>
+            <input type="number" class="form-control" [(ngModel)]="alturaPlaca" name="alturaPlaca" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Largura (cm)</label>
+            <input type="number" class="form-control" [(ngModel)]="larguraPlaca" name="larguraPlaca" required>
+          </div>
+        </div>
+        <div class="text-end mt-3">
+          <button type="submit" class="btn btn-primary"
+            [disabled]="!alturaPlaca || !larguraPlaca || alturaPlaca <= 0 || larguraPlaca <= 0">
+            Calcular
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Formulário de Outros -->
+    <div *ngIf="categoriaSelecionada === 'outros'">
+      <h4 class="section-title mb-4">Outros Orçamentos</h4>
+      <form>
+        <div class="mb-3">
+          <label class="form-label">Descrição do serviço</label>
+          <textarea class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Calcular</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<app-modal [title]="'Enviar pelo WhatsApp'" [visible]="modalWhatsappVisible" (closed)="modalWhatsappVisible = false">
+  <form class="p-2">
+    <div class="mb-3">
+      <label>Nome do Cliente</label>
+      <input type="text" class="form-control" [(ngModel)]="whatsappNomeCliente" name="whatsappNomeCliente" />
+    </div>
+
+    <div class="mb-3">
+      <label>Telefone</label>
+      <input type="text" class="form-control" [(ngModel)]="whatsappTelefoneCliente" name="whatsappTelefoneCliente"
+        mask="(00) 0 0000-0000" />
+    </div>
+
+    <div class="mb-3">
+      <label>Mensagem</label>
+      <textarea class="form-control" rows="6" [(ngModel)]="whatsappMensagem" name="whatsappMensagem"
+        readonly></textarea>
+    </div>
+  </form>
+
+  <div modal-footer>
+    <button class="btn btn-secondary" (click)="modalWhatsappVisible = false">Cancelar</button>
+    <button class="btn btn-success" (click)="enviarWhatsapp()">Enviar</button>
+  </div>
+</app-modal>
+
+<app-modal [title]="'Criar Card no Trello'" [visible]="modalTrelloAberto" [large]="true"
+  (closed)="modalTrelloAberto = false">
+  <form class="px-3 pt-2">
+    <div class="mb-3">
+      <label class="form-label">Nome do Cliente</label>
+      <input type="text" class="form-control" [(ngModel)]="trelloNomeCliente" name="trelloNomeCliente" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Telefone</label>
+      <input type="text" class="form-control" [(ngModel)]="trelloTelefoneCliente" name="trelloTelefoneCliente" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Serviço</label>
+      <input type="text" class="form-control" [(ngModel)]="trelloNomeServico" name="trelloNomeServico" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Observações</label>
+      <textarea class="form-control" rows="3" [(ngModel)]="trelloObservacoes" name="trelloObservacoes"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Informações da Arte</label>
+      <textarea class="form-control" rows="3" [(ngModel)]="trelloInfoArte" name="trelloInfoArte"></textarea>
+    </div>
+
+    <div class="text-end pb-3">
+      <button type="button" class="btn btn-secondary me-2" (click)="modalTrelloAberto = false">Cancelar</button>
+      <button type="button" class="btn btn-success" (click)="confirmarCriacaoCard()">Criar Card</button>
+    </div>
+
+  </form>
+</app-modal>
+
+<app-orcamento-modal [visible]="modalSalvarAberto" [orcamento]="formOrcamento" (closed)="modalSalvarAberto = false"
+  (salvar)="salvarOuAtualizar($event)">
+</app-orcamento-modal>
+
+<app-modal-confirmacao
+  [visible]="modalConfirmacaoVisivelTrello"
+  [titulo]="'Abrir card no Trello!'"
+  [texto]="'Ao abrir um card no trello você estará aprovando esse orcamento! <br> Deseja abrir um card no Trello?'"
+  (confirmar)="confirmarSalvarComCard()"
+  (cancelar)="confirmarSalvarSemCard()">
+</app-modal-confirmacao>
